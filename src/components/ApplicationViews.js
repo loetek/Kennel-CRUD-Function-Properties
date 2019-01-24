@@ -34,6 +34,33 @@ export default class ApplicationViews extends Component {
         })
       );
   };
+  deleteEmployee = id => {
+    return fetch(`http://localhost:5002/employees/${id}`, {
+      method: "DELETE"
+    })
+      .then(response => response.json())
+      .then(() => fetch(`http://localhost:5002/employees`))
+      .then(response => response.json())
+      .then(employee =>
+        this.setState({
+          employees: employee
+        })
+      );
+  };
+
+  deleteOwner = id => {
+    return fetch(`http://localhost:5002/owners/${id}`, {
+      method: "DELETE"
+    })
+      .then(response => response.json())
+      .then(() => fetch(`http://localhost:5002/owners`))
+      .then(response => response.json())
+      .then(owners =>
+        this.setState({
+          animals: owners
+        })
+      );
+  };
 
   addAnimal = animal =>
     AnimalManager.post(animal)
@@ -132,6 +159,22 @@ export default class ApplicationViews extends Component {
                 <EmployeeList
                   deleteEmployee={this.deleteEmployee}
                   employees={this.state.employees}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/owners"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <EmployeeList
+                  deleteEmployee={this.deleteOwners}
+                  owners={this.state.owners}
                 />
               );
             } else {
