@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import AnimalList from "./animal/AnimalList";
 import LocationList from "./location/LocationList";
 import EmployeeList from "./employee/EmployeeList";
+import OwnerList from "./owner/OwnerList";
 import AnimalManager from "../modules/AnimalManager";
 import LocationManager from "../modules/LocationManager";
 import EmployeeManager from "../modules/EmployeeManager";
@@ -15,7 +16,8 @@ export default class ApplicationViews extends Component {
   state = {
     animals: [],
     employees: [],
-    locations: []
+    locations: [],
+    owner: []
   };
 
   // Check if credentials are in local storage
@@ -57,7 +59,7 @@ export default class ApplicationViews extends Component {
       .then(response => response.json())
       .then(owners =>
         this.setState({
-          animals: owners
+          owner: owners
         })
       );
   };
@@ -93,7 +95,7 @@ export default class ApplicationViews extends Component {
 
     OwnerManager.getAll().then(allOwners => {
       this.setState({
-        owners: allOwners
+        owner: allOwners
       });
     });
   }
@@ -157,6 +159,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return (
                 <EmployeeList
+                {...props}
                   deleteEmployee={this.deleteEmployee}
                   employees={this.state.employees}
                 />
@@ -168,13 +171,14 @@ export default class ApplicationViews extends Component {
         />
         <Route
           exact
-          path="/owners"
+          path="/owner"
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <EmployeeList
-                  deleteEmployee={this.deleteOwners}
-                  owners={this.state.owners}
+                <OwnerList
+                {...props}
+                  deleteOwner={this.deleteOwner}
+                  owners={this.state.owner}
                 />
               );
             } else {
